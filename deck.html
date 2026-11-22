@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#202422">
+  <meta name="description" content="從 MIDI 到 AI 管弦樂：基於六份可追溯來源的互動教學簡報">
+  <title>AI 如何理解並生成音樂？｜Music AI Wiki</title>
+  <style>
+:root{--ivory:#f6f4ef;--ink:#202422;--sage:#829b8c;--gold:#b8a17f;--stone:#dad5cb;--muted:#666a63;--deep:#17211b;--dark-line:#566459}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--ivory);color:var(--ink);font-family:Arial,"PingFang TC","Microsoft JhengHei",sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+button:focus-visible,a:focus-visible{outline:2px solid var(--sage);outline-offset:4px}
+.topbar,.nav{height:64px;padding:0 clamp(30px,4.7vw,88px);display:flex;align-items:center;justify-content:space-between;position:relative;z-index:12;background:var(--ivory)}
+.topbar{border-bottom:1px solid var(--stone)}
+.brand{display:flex;align-items:center;gap:17px;font-size:10px;font-weight:700;letter-spacing:.2em;white-space:nowrap}.brand span:first-child{font-family:Georgia,serif;font-size:23px;font-weight:400;letter-spacing:.14em}.brand i{height:17px;width:1px;background:var(--stone)}.brand span:last-child{color:#68736c}
+.topbar button,.nav button{background:none;border:0;min-height:42px;padding:7px 0;font-size:11px;font-weight:700;letter-spacing:.1em;transition:color .2s ease}.topbar button:hover,.nav button:hover{color:#52715d}.menu-icon{font-size:16px;margin-right:12px;font-weight:400}.nav button:disabled{opacity:.35;cursor:default}
+.stage{height:calc(100dvh - 128px);position:relative;overflow:hidden}.slide{display:none;position:absolute;inset:0;overflow:auto;background:var(--ivory);color:var(--ink)}.slide.active{display:block;animation:slide-arrive .4s ease both}.slide.dark{background:var(--deep);color:var(--ivory)}
+@keyframes slide-arrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.slide-inner{width:min(1540px,calc(100% - clamp(60px,9.4vw,176px)));min-height:100%;margin:auto;padding:clamp(24px,3.4vh,43px) 0 26px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr);grid-template-rows:auto 1fr auto;column-gap:clamp(45px,6vw,124px)}
+.slide-meta{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.2em;font-weight:700;color:#728077;border-bottom:1px solid var(--stone);padding-bottom:18px}.dark .slide-meta{color:#abb9aa;border-color:var(--dark-line)}
+.slide-copy{align-self:center;min-width:0;padding:12px 0 30px}.eyebrow{display:flex;align-items:center;gap:12px;color:#658172;font-size:10px;font-weight:700;letter-spacing:.16em;margin-bottom:26px}.eyebrow:before{content:"";width:32px;height:1px;background:var(--sage)}.dark .eyebrow{color:#b8cab9}
+h1{font-family:Georgia,"Noto Serif TC","Songti TC","PMingLiU",serif;font-size:clamp(48px,5.1vw,92px);font-weight:400;letter-spacing:-.055em;line-height:1.17;margin:0 0 34px;text-wrap:balance}.lead{max-width:680px;font-size:clamp(17px,1.35vw,23px);line-height:1.75;color:#59615b;margin:0;text-wrap:pretty}.dark .lead{color:#d0d8d0}
+.visual{align-self:center;min-width:0;max-width:100%;animation:visual-arrive .6s .1s both}.visual svg{display:block;width:100%;height:auto}.visual .figure-note{font-size:12px;line-height:1.65;color:#777e76;margin:18px 0 0}.dark .visual .figure-note{color:#b6c2b5}@keyframes visual-arrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+footer{grid-column:1/-1;border-top:1px solid var(--stone);min-height:48px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 0 0;font-size:10px;letter-spacing:.08em;color:#606b61}footer>span{font-weight:700;letter-spacing:.18em;margin-right:12px;color:#748677}footer a{border-bottom:1px solid #b7c2b4;padding:5px 3px;transition:color .2s ease,border-color .2s ease}footer a:hover{color:#456752;border-color:#456752}.dark footer{border-color:var(--dark-line);color:#ced5cb}.dark footer>span{color:#a9c1ab}.dark footer a{border-color:#889e8a}.dark footer a:hover{color:#fff;border-color:#fff}
+.nav{border-top:1px solid var(--stone)}.nav-center{display:flex;align-items:center;gap:18px}.nav-center>span{font-size:10px;letter-spacing:.12em;font-weight:700;color:#748078;white-space:nowrap}.progress{width:clamp(110px,16vw,270px);height:1px;background:#c4c9c1}.progress div{height:2px;width:8.333%;background:var(--sage);transition:width .3s ease}.nav-center .nav-hint{color:#9ca69e;font-weight:400}
+#menu{display:none;position:fixed;inset:64px 0 64px;background:var(--ivory);z-index:11;overflow:auto;padding:clamp(25px,5vh,55px) clamp(30px,9.4vw,176px)}#menu.open{display:block}.menu-head>span{font-size:10px;font-weight:700;letter-spacing:.2em;color:#7e9583}.menu-head h2{font-family:Georgia,"Noto Serif TC","Songti TC",serif;font-weight:400;font-size:clamp(45px,5vw,80px);letter-spacing:-.05em;margin:14px 0 45px}.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 70px}.menu-grid button{min-height:68px;display:flex;align-items:center;gap:22px;text-align:left;background:transparent;border:0;border-top:1px solid var(--stone);font-family:Georgia,"Noto Serif TC","Songti TC",serif;font-size:20px;transition:color .2s ease,padding .2s ease}.menu-grid button span{font:700 10px Arial,sans-serif;letter-spacing:.1em;color:#8ca18d}.menu-grid button:hover,.menu-grid button[aria-current="page"]{color:#52715d;padding-left:10px}
+/* Opening and closing use type and score lines rather than content cards. */
+.cover .slide-inner{grid-template-columns:1fr .55fr}.cover h1{font-size:clamp(64px,6.8vw,120px);max-width:1000px;margin-bottom:30px}.cover .lead{max-width:560px}.cover .visual{align-self:stretch;display:flex;flex-direction:column;justify-content:center;position:relative}.cover-mark{font-family:Georgia,serif;font-size:clamp(48px,5.2vw,92px);line-height:1.25;font-style:italic;letter-spacing:-.06em;color:#c9d6c8}.cover-mark span{display:block}.cover-mark .cover-slash{color:var(--gold);font-size:.6em;margin-left:1.2em}.score-lines{position:relative;height:120px;margin-top:60px}.score-lines i{display:block;border-top:1px solid #718273;height:21px}.score-lines b{position:absolute;right:18%;top:-45px;font:90px Georgia,serif;color:var(--gold);font-weight:400}.cover-caption{font-size:10px;letter-spacing:.19em;color:#afbbac}.cover-caption span{color:var(--gold);padding:0 8px}
+.closing .slide-inner{grid-template-columns:1fr .85fr}.closing .visual{display:grid;gap:40px}.closing-points{border-top:1px solid var(--dark-line)}.closing-points div{border-bottom:1px solid var(--dark-line);display:flex;gap:24px;align-items:center;min-height:72px}.closing-points b{font-size:10px;letter-spacing:.12em;color:#acc2ad}.closing-points span{font-family:Georgia,"Noto Serif TC","Songti TC",serif;font-size:clamp(25px,2.4vw,37px)}.closing-quote{font-family:Georgia,"Noto Serif TC","Songti TC",serif;color:#9bb19d;font-size:clamp(20px,2.1vw,32px);font-style:italic;line-height:1.5;margin:0}
+/* Course map */
+.agenda .slide-inner{grid-template-columns:.72fr 1.25fr}.question-list{list-style:none;padding:0;margin:0;border-top:1px solid var(--stone)}.question-list li{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:16px;min-height:132px;border-bottom:1px solid var(--stone)}.question-list b{font:normal 16px Georgia,serif;color:#77917e;align-self:start;padding-top:36px}.question-list span{font-family:Georgia,"Noto Serif TC","Songti TC",serif;font-size:clamp(25px,2.6vw,42px);line-height:1.35}.question-list em{font:normal 10px Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#7e847b;align-self:end;padding-bottom:35px}
+/* Technical diagrams */
+.compare-visual{border-top:1px solid var(--stone)}.compare-half{padding:22px 0 15px;border-bottom:1px solid var(--stone)}.diagram-label{display:flex;justify-content:space-between;gap:18px;font-size:10px;letter-spacing:.15em;font-weight:700;color:#6c856f}.diagram-label span{font-size:12px;letter-spacing:.03em;font-weight:400;color:#687168}.compare-half svg{margin-top:18px;max-height:125px}.compare-half .axis,.compare-half .grid{fill:none;stroke:#d1d4ca;stroke-width:1}.compare-half .waveform{fill:none;stroke:#738d79;stroke-width:2.2}.compare-half rect{fill:#829b8c}
+.event-diagram{padding:10px 0}.event-top,.event-bottom{display:flex;justify-content:space-between;gap:15px}.event-top{font-size:11px;letter-spacing:.16em;font-weight:700}.event-top span:first-child{color:#63816e}.event-bottom{font-size:15px;line-height:1.5}.event-bottom span:last-child{text-align:right}.event-bottom em{font-style:normal;color:#7a8379;font-size:12px}.event-rule{height:60px;display:flex;align-items:center}.event-rule b{height:1px;background:var(--sage);flex:1}.event-rule i{width:9px;height:9px;border:2px solid var(--sage);border-radius:50%}.event-piano{height:130px;margin-top:42px;display:flex;position:relative;border:1px solid #aeb9ad}.event-piano i{flex:1;border-right:1px solid #aeb9ad;background:#fbfaf6}.event-piano i:last-of-type{border-right:0}.event-piano i.pressed{background:#cfdbd0}.event-piano b{position:absolute;top:0;width:7%;height:62%;background:var(--ink)}.event-piano b:nth-of-type(1){left:10.8%}.event-piano b:nth-of-type(2){left:25.2%}.event-piano b:nth-of-type(3){left:53.8%}.event-piano b:nth-of-type(4){left:68.1%}.event-piano b:nth-of-type(5){left:82.4%}
+.theme-figure{padding:25px 0}.theme-track{display:flex;align-items:center;gap:16px}.theme-track span{font:italic clamp(62px,7vw,120px) Georgia,serif;color:#d4e2d4}.theme-track span:nth-of-type(2){color:var(--gold)}.theme-track i{height:1px;background:#758977;flex:1;min-width:15px}.theme-key{display:flex;justify-content:space-between;color:#c7d3c6;font-size:13px;letter-spacing:.1em;border-top:1px solid var(--dark-line);margin-top:26px;padding-top:16px}.theme-figure .figure-note{margin-top:42px}
+.model-compare{border-top:1px solid var(--stone)}.model-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;border-bottom:1px solid var(--stone);padding:25px 0;min-height:190px}.model-intro small,.flow-input small,.flow-model small,.flow-output small,.skeleton-figure small,.process-figure small{font:700 10px Arial,sans-serif;letter-spacing:.15em;color:#738c79}.model-intro h3{font:normal clamp(25px,2.5vw,42px)/1.08 Georgia,serif;letter-spacing:-.05em;margin:13px 0}.model-intro p{font-size:13px;line-height:1.5;color:#687168;margin:0}.attention{position:relative;display:flex;justify-content:space-between;font-size:11px;color:#6b7b6d;padding-top:13px}.attention svg{position:absolute;top:28px;left:0;width:100%;height:80px;overflow:visible}.attention path{fill:none;stroke:#829b8c;stroke-width:1.2}.latent{display:flex;align-items:center;gap:10px;justify-content:space-between}.latent span{font:italic 31px Georgia,serif;color:#496752}.latent i{width:10px;height:10px;border-radius:50%;background:var(--sage)}.latent i:nth-of-type(2){opacity:.65}.latent i:nth-of-type(3){opacity:.4}.latent:before,.latent:after{content:"";height:1px;background:var(--sage);flex:1}
+.generation-flow{display:flex;align-items:stretch;gap:8px}.flow-input,.flow-model,.flow-output{min-height:185px;flex:1;border-top:1px solid var(--sage);border-bottom:1px solid var(--stone);padding:18px 8px 10px 0;display:flex;flex-direction:column;gap:28px}.flow-input strong,.flow-model strong,.flow-output strong{font:normal clamp(24px,2.4vw,39px)/1.25 Georgia,"Noto Serif TC","Songti TC",serif;letter-spacing:-.04em}.flow-input strong span{color:#6e776d}.flow-model strong{color:#60816b}.flow-output svg{max-height:40px}.flow-output path{fill:none;stroke:var(--sage);stroke-width:1.5}.flow-arrow{align-self:center;color:var(--gold);font:30px Georgia,serif}
+.orchestra-figure{border-top:1px solid var(--stone)}.measure-top{display:grid;grid-template-columns:repeat(4,1fr);margin-left:100px;padding:18px 0;font-size:9px;letter-spacing:.12em;color:#829287}.orchestra-row{height:75px;border-top:1px solid var(--stone);position:relative;display:flex;align-items:center;overflow:hidden;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(25% - 1px),#dad5cb calc(25% - 1px),#dad5cb 25%)}.orchestra-row label{width:100px;flex:none;font-size:10px;font-weight:700;letter-spacing:.1em;color:#667e6e;background:var(--ivory);position:relative;z-index:1}.orchestra-row i{position:absolute;left:max(100px,var(--s));width:var(--w);height:8px;background:#829b8c;top:31px}.orchestra-row:nth-of-type(3) i{background:#b8a17f}.orchestra-row:nth-of-type(4) i{background:#a3b3a5}.orchestra-row.percussion i{width:9px;height:9px;border-radius:50%;background:var(--ink)}.orchestra-row:last-of-type{border-bottom:1px solid var(--stone)}
+.skeleton-figure{border-top:1px solid var(--stone);padding-top:20px}.skeleton-input,.skeleton-output{border:1px solid var(--stone);padding:24px 28px}.skeleton-input div{font:clamp(30px,3.6vw,56px) Georgia,serif;letter-spacing:-.05em;margin-top:22px}.skeleton-input div span{font-size:.55em;color:var(--sage);padding:0 7px}.skeleton-down{text-align:center;color:#718a79;font:35px Georgia,serif;margin:8px 0}.skeleton-output{border-color:var(--sage)}.skeleton-output div{display:flex;justify-content:space-between;gap:10px;margin-top:21px;font:clamp(19px,2vw,30px) Georgia,"Noto Serif TC","Songti TC",serif}.skeleton-output div span{border-bottom:1px solid var(--stone);padding-bottom:8px}
+.process-figure{border-top:1px solid var(--stone)}.process-figure>div{display:grid;grid-template-columns:100px 1fr;gap:20px;align-items:center;border-bottom:1px solid var(--stone);min-height:84px}.process-figure strong{font:normal clamp(19px,2.1vw,32px) Georgia,"Noto Serif TC","Songti TC",serif;line-height:1.3}.process-figure>div:last-child strong{color:#63806a}
+.quizbox{display:grid;gap:12px}.quizbox button{border:1px solid var(--stone);background:none;text-align:left;min-height:94px;padding:18px 22px;font-family:Georgia,"Noto Serif TC","Songti TC",serif;font-size:clamp(20px,2.1vw,31px);transition:background .2s ease,border-color .2s ease}.quizbox button:hover{background:#edf0e8;border-color:var(--sage)}.quizbox button span{display:block;font:700 10px Arial,sans-serif;color:#76917b;letter-spacing:.15em;margin-bottom:9px}.quizbox button.selected.correct{background:#e9eee6;border-color:var(--sage)}.quizbox button.selected.incorrect{background:#f1ece5;border-color:var(--gold)}.quizbox button.selected.correct:after{content:" ✓";color:#63806a}.quizbox button.selected.incorrect:after{content:" ×";color:#957d5f}.quizbox p{font-size:14px;line-height:1.6;min-height:25px;color:#587460;margin:4px 0 0}
+@media(max-width:1100px){.slide-inner{column-gap:38px}.agenda .slide-inner{grid-template-columns:.8fr 1.1fr}.question-list li{min-height:110px}.model-row{min-height:165px;padding:17px 0}.cover h1{font-size:clamp(54px,6.5vw,85px)}.measure-top{margin-left:75px}.orchestra-row label{width:75px}.orchestra-row i{left:max(75px,var(--s))}}
+@media(max-width:750px){.topbar,.nav{height:58px;padding:0 22px}.stage{height:calc(100dvh - 116px)}.brand span:first-child{font-size:19px}.brand span:last-child{font-size:8px;letter-spacing:.1em}.topbar button{font-size:10px}.slide-inner,.cover .slide-inner,.agenda .slide-inner,.closing .slide-inner{width:calc(100% - 44px);display:flex;flex-direction:column;min-height:100%;padding:20px 0 15px}.slide-meta{width:100%;padding-bottom:10px;font-size:8px}.slide-copy{align-self:auto;padding:27px 0 0}.eyebrow{font-size:9px;margin-bottom:13px}.eyebrow:before{width:19px}h1,.cover h1{font-size:clamp(38px,9vw,63px);margin-bottom:14px}.lead{font-size:clamp(15px,3.5vw,18px);line-height:1.55}.visual{align-self:auto;width:100%;margin:30px 0 25px}.cover .visual{min-height:180px;margin:15px 0}.cover-mark{font-size:clamp(38px,8vw,60px);display:flex;gap:10px}.cover-mark .cover-slash{margin:0;font-size:1em}.score-lines{height:55px;margin-top:22px}.score-lines i{height:10px}.score-lines b{font-size:44px;top:-29px}.cover-caption{font-size:8px}.question-list li{min-height:74px;grid-template-columns:32px 1fr auto}.question-list b{padding-top:17px}.question-list span{font-size:clamp(19px,5vw,30px)}.question-list em{font-size:8px;padding-bottom:15px}.compare-half{padding:10px 0}.compare-half svg{max-height:95px;margin-top:8px}.event-piano{height:80px;margin-top:15px}.theme-track span{font-size:clamp(53px,12vw,80px)}.theme-key{margin-top:10px}.theme-figure .figure-note{margin-top:18px}.model-row{min-height:125px;padding:12px 0}.model-intro h3{font-size:clamp(20px,5vw,30px);margin:5px 0}.model-intro p{font-size:11px}.attention{font-size:9px}.generation-flow .flow-input,.generation-flow .flow-model,.generation-flow .flow-output{min-height:105px;gap:15px;padding:10px 2px 5px 0}.flow-input strong,.flow-model strong,.flow-output strong{font-size:clamp(16px,4vw,26px)}.flow-arrow{font-size:20px}.orchestra-row{height:50px}.measure-top{padding:8px 0}.orchestra-row i{top:21px}.skeleton-input,.skeleton-output{padding:14px}.skeleton-input div{font-size:clamp(28px,6vw,42px);margin-top:9px}.skeleton-output div{font-size:clamp(15px,4vw,24px);margin-top:9px}.skeleton-down{font-size:23px;margin:2px}.process-figure>div{min-height:59px;grid-template-columns:90px 1fr}.process-figure strong{font-size:clamp(16px,3.7vw,23px)}.quizbox button{min-height:65px;padding:10px 14px;font-size:clamp(17px,4vw,23px)}.quizbox button span{margin-bottom:4px}.closing .visual{gap:25px}.closing-points div{min-height:54px}.closing-points span{font-size:23px}footer{margin-top:auto;min-height:0;padding-top:9px;font-size:9px;gap:5px}footer>span{margin-right:5px}.nav-center .nav-hint{display:none}.progress{width:80px}#menu{inset:58px 0 58px;padding:25px 22px}.menu-head h2{margin-bottom:20px}.menu-grid{display:block}.menu-grid button{width:100%;min-height:54px;font-size:17px}}
+@media(max-width:420px){.brand{gap:8px}.brand span:last-child{max-width:62px;white-space:normal;line-height:1.3}.topbar button{font-size:0}.menu-icon{font-size:19px;margin:0}.nav button{font-size:10px}.nav-center{gap:9px}.progress{width:54px}.slide-copy{padding-top:18px}.visual{margin:20px 0 15px}.question-list em{display:none}.model-intro small{font-size:8px}.attention svg{top:20px}.generation-flow{gap:3px}.flow-arrow{font-size:15px}.orchestra-row label{font-size:8px}.measure-top{font-size:7px}.closing-quote{font-size:20px}}
+@media(max-height:650px){.slide-copy{padding-top:15px}.eyebrow{margin-bottom:10px}h1,.cover h1{font-size:clamp(32px,7vw,54px);margin-bottom:10px}.lead{font-size:14px;line-height:1.45}.visual{margin:16px 0}.slide-inner{padding-top:12px;padding-bottom:10px}.question-list li{min-height:55px}.compare-half svg{max-height:70px}.model-row{min-height:105px}.orchestra-row{height:43px}.orchestra-row i{top:18px}.cover .score-lines{display:none}.cover .visual{min-height:110px}.closing .visual{gap:15px}.closing-points div{min-height:43px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span>ASHLAN</span><i></i><span>MUSIC AI WIKI</span></div>
+    <button id="menuBtn" type="button" onclick="toggleMenu()" aria-label="開啟章節導覽" aria-expanded="false" aria-controls="menu"><span class="menu-icon" aria-hidden="true">☰</span> 章節目錄</button>
+  </header>
+  <main class="stage" id="slides">
+    <section class="slide cover dark active" data-index="0" aria-label="第 1 張：從 MIDI、Transformer 到 AI 管弦樂">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>01 / 12</span><span>OPENING</span></div>
+    <div class="slide-copy"><div class="eyebrow">AI 如何理解並生成音樂？</div><h1>從 MIDI、Transformer 到 AI 管弦樂</h1><p class="lead">不是把音符丟給 AI 就會自動變成一個真實的交響樂團。</p></div>
+    <div class="visual"><div class="cover-mark" aria-hidden="true"><span>Sound</span><span class="cover-slash">/</span><span>System</span></div>
+<div class="score-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><b>♪</b></div>
+<p class="cover-caption">A MUSIC AI WIKI PRESENTATION <span>·</span> 12 FRAMES</p></div>
+    <footer><span>WIKI SOURCES</span><a href="https://midi.org/summary-of-midi-1-0-messages" target="_blank" rel="noopener noreferrer" title="查看原始資料">S01 ↗</a><a href="https://arxiv.org/abs/2604.25498" target="_blank" rel="noopener noreferrer" title="查看原始資料">S05 ↗</a></footer>
+  </div>
+</section><section class="slide agenda" data-index="1" aria-label="第 2 張：今天學會什麼？">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>02 / 12</span><span>COURSE MAP</span></div>
+    <div class="slide-copy"><div class="eyebrow">先理解這堂課的三個問題</div><h1>今天學會什麼？</h1><p class="lead">① 電腦怎麼表示音樂？　② AI 怎麼學習音樂？　③ AI 管弦配器為什麼困難？</p></div>
+    <div class="visual"><ol class="question-list"><li><b>01</b><span>電腦怎麼<br>表示音樂？</span><em>Representation</em></li><li><b>02</b><span>AI 怎麼<br>學習音樂？</span><em>Learning</em></li><li><b>03</b><span>管弦配器<br>為什麼困難？</span><em>Orchestration</em></li></ol></div>
+    <footer><span>WIKI SOURCES</span><a href="https://midi.org/summary-of-midi-1-0-messages" target="_blank" rel="noopener noreferrer" title="查看原始資料">S01 ↗</a><a href="https://arxiv.org/abs/1809.04281" target="_blank" rel="noopener noreferrer" title="查看原始資料">S02 ↗</a><a href="https://arxiv.org/abs/2604.25498" target="_blank" rel="noopener noreferrer" title="查看原始資料">S05 ↗</a></footer>
+  </div>
+</section><section class="slide comparison" data-index="2" aria-label="第 3 張：Audio ≠ MIDI">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>03 / 12</span><span>REPRESENTATION</span></div>
+    <div class="slide-copy"><div class="eyebrow">聲音與樂譜，是兩種不同資料</div><h1>Audio ≠ MIDI</h1><p class="lead">Audio：記錄實際聲波；MIDI：記錄音符與控制事件。MIDI 可以換音色、改音高，但不是錄音檔。</p></div>
+    <div class="visual"><div class="compare-visual"><div class="compare-half"><div class="diagram-label">01 / AUDIO <span>聲波與實際音色</span></div><svg viewBox="0 0 560 130" role="img" aria-label="音訊波形示意圖"><path class="axis" d="M0 65H560"/><path class="waveform" d="M0 65 Q14 64 22 54 T42 70 T63 59 T84 68 T104 48 T124 78 T145 35 T164 85 T185 52 T205 75 T227 28 T247 95 T269 42 T289 81 T310 55 T330 69 T350 37 T371 90 T392 47 T414 75 T434 58 T454 68 T475 49 T495 74 T515 58 T536 67 T560 65"/></svg></div><div class="compare-half"><div class="diagram-label">02 / MIDI <span>音符與演奏事件</span></div><svg viewBox="0 0 560 130" role="img" aria-label="MIDI 鋼琴捲軸示意圖"><path class="grid" d="M0 26H560M0 52H560M0 78H560M0 104H560M112 0V130M224 0V130M336 0V130M448 0V130"/><rect x="18" y="78" width="104" height="18"/><rect x="138" y="52" width="87" height="18"/><rect x="240" y="26" width="82" height="18"/><rect x="341" y="52" width="106" height="18"/><rect x="465" y="78" width="73" height="18"/></svg></div></div></div>
+    <footer><span>WIKI SOURCES</span><a href="https://midi.org/summary-of-midi-1-0-messages" target="_blank" rel="noopener noreferrer" title="查看原始資料">S01 ↗</a><a href="https://arxiv.org/abs/2306.05284" target="_blank" rel="noopener noreferrer" title="查看原始資料">S04 ↗</a></footer>
+  </div>
+</section><section class="slide technical" data-index="3" aria-label="第 4 張：MIDI 事件示例">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>04 / 12</span><span>MIDI EVENTS</span></div>
+    <div class="slide-copy"><div class="eyebrow">音符在電腦裡長什麼樣？</div><h1>MIDI 事件示例</h1><p class="lead">Note On → 音符開始；Note Off → 音符結束。事件可以帶音高、力度、通道等資訊；通道不保證等於一個樂器聲部。</p></div>
+    <div class="visual"><div class="event-diagram"><div class="event-top"><span>NOTE ON</span><span>NOTE OFF</span></div><div class="event-rule"><i></i><b></b><i></i></div><div class="event-bottom"><span>note 60<br><em>velocity 90</em></span><span>note 60</span></div><div class="event-piano" aria-hidden="true"><i></i><i></i><i class="pressed"></i><i></i><i></i><i></i><i></i><b></b><b></b><b></b><b></b><b></b></div><p class="figure-note">示意：中音 C（MIDI note 60）的一次按下與放開</p></div></div>
+    <footer><span>WIKI SOURCES</span><a href="https://midi.org/summary-of-midi-1-0-messages" target="_blank" rel="noopener noreferrer" title="查看原始資料">S01 ↗</a></footer>
+  </div>
+</section><section class="slide divider dark" data-index="4" aria-label="第 5 張：AI 必須學習時間結構">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>05 / 12</span><span>MUSICAL STRUCTURE</span></div>
+    <div class="slide-copy"><div class="eyebrow">一首歌不只是單一音符</div><h1>AI 必須學習時間結構</h1><p class="lead">短期看音符接續與節奏；長期還要顧及主題、重複、變化與段落。Music Transformer 研究如何改善長距離關係。</p></div>
+    <div class="visual"><div class="theme-figure" aria-label="A 主題、B 發展、A prime 回歸的段落示意"><div class="theme-track"><span>A</span><i></i><span>B</span><i></i><span>A′</span></div><div class="theme-key"><span>主題</span><span>發展</span><span>回歸</span></div><p class="figure-note">ABA′ 只是教學用的段落示意，並非特定模型必然生成的結構。</p></div></div>
+    <footer><span>WIKI SOURCES</span><a href="https://arxiv.org/abs/1809.04281" target="_blank" rel="noopener noreferrer" title="查看原始資料">S02 ↗</a></footer>
+  </div>
+</section><section class="slide models" data-index="5" aria-label="第 6 張：Music Transformer vs MusicVAE">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>06 / 12</span><span>MODEL COMPARISON</span></div>
+    <div class="slide-copy"><div class="eyebrow">兩條不同的音樂 AI 路線</div><h1>Music Transformer vs MusicVAE</h1><p class="lead">Music Transformer：用注意力模型處理長期音樂關係。MusicVAE：學習可生成與插值的音樂潛在空間。</p></div>
+    <div class="visual"><div class="model-compare"><div class="model-row"><div class="model-intro"><small>01 / SEQUENCE</small><h3>Music<br>Transformer</h3><p>注意力模型處理長期音樂關係</p></div><div class="attention" role="img" aria-label="不同位置之間的注意力關係概念圖"><span>motif</span><span>repeat</span><span>variation</span><svg viewBox="0 0 255 78" aria-hidden="true"><path d="M29 12 C75 75 173 75 226 12M29 12 C99 48 175 45 226 12M29 12 C93 22 153 35 226 12"/></svg></div></div><div class="model-row"><div class="model-intro"><small>02 / LATENT SPACE</small><h3>MusicVAE</h3><p>可生成與插值的音樂潛在空間</p></div><div class="latent" role="img" aria-label="A 到 B 的音樂插值概念圖"><span>A</span><i></i><i></i><i></i><span>B</span></div></div></div></div>
+    <footer><span>WIKI SOURCES</span><a href="https://arxiv.org/abs/1809.04281" target="_blank" rel="noopener noreferrer" title="查看原始資料">S02 ↗</a><a href="https://proceedings.mlr.press/v80/roberts18a.html" target="_blank" rel="noopener noreferrer" title="查看原始資料">S03 ↗</a></footer>
+  </div>
+</section><section class="slide technical" data-index="6" aria-label="第 7 張：MusicGen：文字到音訊">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>07 / 12</span><span>TEXT TO AUDIO</span></div>
+    <div class="slide-copy"><div class="eyebrow">如果輸入一句文字呢？</div><h1>MusicGen：文字到音訊</h1><p class="lead">文字或旋律作為條件，模型產生聽得見的音訊。重點：音訊不等於有清楚樂器分軌的 MIDI。</p></div>
+    <div class="visual"><div class="generation-flow"><div class="flow-input"><small>CONDITION</small><strong>文字描述<br><span>或旋律</span></strong></div><div class="flow-arrow" aria-hidden="true">→</div><div class="flow-model"><small>MODEL</small><strong>MusicGen</strong></div><div class="flow-arrow" aria-hidden="true">→</div><div class="flow-output"><small>OUTPUT</small><strong>Audio</strong><svg viewBox="0 0 230 40" aria-hidden="true"><path d="M0 20Q8 18 14 20T28 18T42 22T56 13T70 28T84 8T98 31T112 13T126 26T140 16T154 23T168 12T182 29T196 14T210 24T230 20"/></svg></div></div><p class="figure-note">生成音訊 ≠ 直接取得可逐音編輯的多軌 MIDI</p></div>
+    <footer><span>WIKI SOURCES</span><a href="https://arxiv.org/abs/2306.05284" target="_blank" rel="noopener noreferrer" title="查看原始資料">S04 ↗</a></footer>
+  </div>
+</section><section class="slide tracks" data-index="7" aria-label="第 8 張：從一條旋律到多樂器聲部">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>08 / 12</span><span>ORCHESTRATION</span></div>
+    <div class="slide-copy"><div class="eyebrow">管弦樂多了什麼難題？</div><h1>從一條旋律到多樂器聲部</h1><p class="lead">模型還須同時處理小節的結構、樂器軌道與音符事件；聲部與演奏合理性是需要額外檢查的問題。</p></div>
+    <div class="visual"><div class="orchestra-figure"><div class="measure-top"><span>BAR / 01</span><span>BAR / 02</span><span>BAR / 03</span><span>BAR / 04</span></div><div class="orchestra-row"><label>STRINGS</label><i style="--s:16%;--w:18%"></i><i style="--s:42%;--w:25%"></i><i style="--s:76%;--w:15%"></i></div><div class="orchestra-row"><label>BRASS</label><i style="--s:29%;--w:28%"></i><i style="--s:72%;--w:21%"></i></div><div class="orchestra-row"><label>WINDS</label><i style="--s:12%;--w:13%"></i><i style="--s:39%;--w:17%"></i><i style="--s:68%;--w:19%"></i></div><div class="orchestra-row percussion"><label>PERC.</label><i style="--s:10%;--w:2%"></i><i style="--s:35%;--w:2%"></i><i style="--s:61%;--w:2%"></i><i style="--s:86%;--w:2%"></i></div><p class="figure-note">圖為多軌結構示意，不是 SymphonyGen 的實際輸出。</p></div></div>
+    <footer><span>WIKI SOURCES</span><a href="https://arxiv.org/abs/2604.25498" target="_blank" rel="noopener noreferrer" title="查看原始資料">S05 ↗</a></footer>
+  </div>
+</section><section class="slide technical" data-index="8" aria-label="第 9 張：先有骨架，再補上音樂細節">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>09 / 12</span><span>HARMONY SKELETON</span></div>
+    <div class="slide-copy"><div class="eyebrow">Harmony Skeleton 是什麼？</div><h1>先有骨架，再補上音樂細節</h1><p class="lead">可把和聲骨架想成「音樂的建築藍圖」；SymphonyGen 以節拍量化、多聲部 skeleton 作條件引導管弦樂生成。</p></div>
+    <div class="visual"><div class="skeleton-figure"><div class="skeleton-input"><small>CONDITION / HARMONY SKELETON</small><div>C <span>→</span> F <span>→</span> G <span>→</span> C</div></div><div class="skeleton-down" aria-hidden="true">↓</div><div class="skeleton-output"><small>ORCHESTRAL MIDI EVENTS</small><div><span>旋律</span><span>和聲</span><span>節奏紋理</span></div></div><p class="figure-note">和弦進行為自製概念範例，不是論文的固定輸入。</p></div></div>
+    <footer><span>WIKI SOURCES</span><a href="https://arxiv.org/abs/2604.25498" target="_blank" rel="noopener noreferrer" title="查看原始資料">S05 ↗</a><a href="https://www.nature.com/articles/s41598-026-46750-0" target="_blank" rel="noopener noreferrer" title="查看原始資料">S06 ↗</a></footer>
+  </div>
+</section><section class="slide process" data-index="9" aria-label="第 10 張：輸入 → 條件 → 生成 → 驗證">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>10 / 12</span><span>GENERATION WORKFLOW</span></div>
+    <div class="slide-copy"><div class="eyebrow">AI 生成管弦樂的概念流程</div><h1>輸入 → 條件 → 生成 → 驗證</h1><p class="lead">簡化示意：和聲／結構提示 → 分層生成多軌事件 → MIDI／音源呈現 → 檢查和聲、分軌與可演奏性。最後的檢查是教學建議，非論文保證。</p></div>
+    <div class="visual"><div class="process-figure"><div><small>01 / INPUT</small><strong>和聲、結構提示</strong></div><div><small>02 / GENERATE</small><strong>分層生成多軌事件</strong></div><div><small>03 / RENDER</small><strong>MIDI／音源呈現</strong></div><div><small>04 / REVIEW</small><strong>檢查和聲、分軌與可演奏性</strong></div></div><p class="figure-note">最後的檢查是教學建議，非論文保證。</p></div>
+    <footer><span>WIKI SOURCES</span><a href="https://midi.org/summary-of-midi-1-0-messages" target="_blank" rel="noopener noreferrer" title="查看原始資料">S01 ↗</a><a href="https://arxiv.org/abs/2604.25498" target="_blank" rel="noopener noreferrer" title="查看原始資料">S05 ↗</a><a href="https://www.nature.com/articles/s41598-026-46750-0" target="_blank" rel="noopener noreferrer" title="查看原始資料">S06 ↗</a></footer>
+  </div>
+</section><section class="slide quiz" data-index="10" aria-label="第 11 張：快速測驗">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>11 / 12</span><span>CHECK YOUR UNDERSTANDING</span></div>
+    <div class="slide-copy"><div class="eyebrow">哪一個說法是正確的？</div><h1>快速測驗</h1><p class="lead">MusicGen 能直接產生可逐音修改的多軌 MIDI 嗎？先選一個答案，再看看解析。</p></div>
+    <div class="visual"><div class="quizbox"><button id="trueBtn" type="button" onclick="answer(false)"><span>01</span>對，直接輸出多軌 MIDI</button><button id="falseBtn" type="button" onclick="answer(true)"><span>02</span>錯，主要輸出音訊</button><p id="quizResult" aria-live="polite">選擇你的答案</p></div></div>
+    <footer><span>WIKI SOURCES</span><a href="https://arxiv.org/abs/2306.05284" target="_blank" rel="noopener noreferrer" title="查看原始資料">S04 ↗</a><a href="https://arxiv.org/abs/2604.25498" target="_blank" rel="noopener noreferrer" title="查看原始資料">S05 ↗</a></footer>
+  </div>
+</section><section class="slide closing dark" data-index="11" aria-label="第 12 張：總結與延伸">
+  <div class="slide-inner">
+    <div class="slide-meta"><span>12 / 12</span><span>CLOSING</span></div>
+    <div class="slide-copy"><div class="eyebrow">帶走三個重點</div><h1>總結與延伸</h1><p class="lead">① MIDI 與 Audio 不同。② 模型處理長期音樂結構的方法不同。③ 管弦樂生成需要額外的結構控制和聲部驗證。</p></div>
+    <div class="visual"><div class="closing-points"><div><b>01</b><span>MIDI ≠ Audio</span></div><div><b>02</b><span>結構 ≠ 音色</span></div><div><b>03</b><span>生成 ≠ 驗證</span></div></div><p class="closing-quote">「讓音樂被表示，<br>讓結構被聽見。」</p></div>
+    <footer><span>WIKI SOURCES</span><a href="https://midi.org/summary-of-midi-1-0-messages" target="_blank" rel="noopener noreferrer" title="查看原始資料">S01 ↗</a><a href="https://arxiv.org/abs/1809.04281" target="_blank" rel="noopener noreferrer" title="查看原始資料">S02 ↗</a><a href="https://proceedings.mlr.press/v80/roberts18a.html" target="_blank" rel="noopener noreferrer" title="查看原始資料">S03 ↗</a><a href="https://arxiv.org/abs/2306.05284" target="_blank" rel="noopener noreferrer" title="查看原始資料">S04 ↗</a><a href="https://arxiv.org/abs/2604.25498" target="_blank" rel="noopener noreferrer" title="查看原始資料">S05 ↗</a><a href="https://www.nature.com/articles/s41598-026-46750-0" target="_blank" rel="noopener noreferrer" title="查看原始資料">S06 ↗</a></footer>
+  </div>
+</section>
+  </main>
+  <aside id="menu" aria-label="章節列表" aria-hidden="true">
+    <div class="menu-head"><span>CONTENTS / 12 FRAMES</span><h2>課程目錄</h2></div>
+    <div class="menu-grid"><button type="button" onclick="go(0);toggleMenu(false)"><span>01</span>從 MIDI、Transformer 到 AI 管弦樂</button>
+<button type="button" onclick="go(1);toggleMenu(false)"><span>02</span>今天學會什麼？</button>
+<button type="button" onclick="go(2);toggleMenu(false)"><span>03</span>Audio ≠ MIDI</button>
+<button type="button" onclick="go(3);toggleMenu(false)"><span>04</span>MIDI 事件示例</button>
+<button type="button" onclick="go(4);toggleMenu(false)"><span>05</span>AI 必須學習時間結構</button>
+<button type="button" onclick="go(5);toggleMenu(false)"><span>06</span>Music Transformer vs MusicVAE</button>
+<button type="button" onclick="go(6);toggleMenu(false)"><span>07</span>MusicGen：文字到音訊</button>
+<button type="button" onclick="go(7);toggleMenu(false)"><span>08</span>從一條旋律到多樂器聲部</button>
+<button type="button" onclick="go(8);toggleMenu(false)"><span>09</span>先有骨架，再補上音樂細節</button>
+<button type="button" onclick="go(9);toggleMenu(false)"><span>10</span>輸入 → 條件 → 生成 → 驗證</button>
+<button type="button" onclick="go(10);toggleMenu(false)"><span>11</span>快速測驗</button>
+<button type="button" onclick="go(11);toggleMenu(false)"><span>12</span>總結與延伸</button></div>
+  </aside>
+  <nav class="nav" aria-label="投影片控制">
+    <button id="prevBtn" type="button" onclick="go(current-1)" aria-label="上一頁" disabled><span aria-hidden="true">←</span> 上一頁</button>
+    <div class="nav-center"><span id="counter">01 / 12</span><div class="progress" role="progressbar" aria-label="簡報進度" aria-valuemin="1" aria-valuemax="12" aria-valuenow="1"><div id="progress"></div></div><span class="nav-hint">← → 翻頁</span></div>
+    <button id="nextBtn" type="button" onclick="go(current+1)" aria-label="下一頁">下一頁 <span aria-hidden="true">→</span></button>
+  </nav>
+  <script>
+const pages=[...document.querySelectorAll('.slide')];
+const menu=document.getElementById('menu');
+const menuBtn=document.getElementById('menuBtn');
+const menuItems=[...menu.querySelectorAll('button')];
+let current=0;
+
+function go(index){
+  if(index<0||index>=pages.length)return;
+  pages[current].classList.remove('active');
+  current=index;
+  pages[current].classList.add('active');
+  pages[current].scrollTop=0;
+  document.getElementById('counter').textContent=String(current+1).padStart(2,'0')+' / '+pages.length;
+  document.getElementById('progress').style.width=((current+1)/pages.length*100)+'%';
+  document.querySelector('.progress').setAttribute('aria-valuenow',String(current+1));
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').disabled=current===pages.length-1;
+  menuItems.forEach((button,i)=>i===current?button.setAttribute('aria-current','page'):button.removeAttribute('aria-current'));
+  document.title=pages[current].querySelector('h1').textContent+'｜Music AI Wiki';
+}
+
+function toggleMenu(force){
+  const open=typeof force==='boolean'?force:!menu.classList.contains('open');
+  menu.classList.toggle('open',open);
+  menu.setAttribute('aria-hidden',String(!open));
+  menuBtn.setAttribute('aria-expanded',String(open));
+  if(open)menuItems[current].focus();
+  else if(menu.contains(document.activeElement))menuBtn.focus();
+}
+
+function answer(ok){
+  document.querySelectorAll('.quizbox button').forEach(button=>button.classList.remove('selected','correct','incorrect'));
+  document.getElementById(ok?'falseBtn':'trueBtn').classList.add('selected',ok?'correct':'incorrect');
+  document.getElementById('quizResult').textContent=ok
+    ?'✓ 正確！MusicGen 生成的是音訊；符號式模型另有不同輸出。'
+    :'再想想：MusicGen 的音訊 token 不等於可直接編輯的多軌 MIDI。';
+}
+
+document.addEventListener('keydown',event=>{
+  const interactive=['BUTTON','A','INPUT','TEXTAREA','SELECT'].includes(event.target.tagName);
+  if(event.key==='Escape'){toggleMenu(false);return}
+  if(menu.classList.contains('open'))return;
+  if(event.key==='ArrowRight'||event.key==='PageDown'||(event.key===' '&&!interactive)){
+    event.preventDefault();go(current+1);
+  }else if(event.key==='ArrowLeft'||event.key==='PageUp'){
+    event.preventDefault();go(current-1);
+  }else if(event.key==='Home'){
+    event.preventDefault();go(0);
+  }else if(event.key==='End'){
+    event.preventDefault();go(pages.length-1);
+  }
+});
+
+go(0);
+
+  </script>
+</body>
+</html>
