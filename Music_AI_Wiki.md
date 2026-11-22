@@ -1,4 +1,4 @@
-# Music AI Wiki：從 MIDI、Transformer 到 AI 管弦樂生成
+# Music AI Wiki
 
 > **主題**：AI 如何理解並生成音樂？  
 > **用途**：作為 12 頁 HTML 教學簡報的知識來源與引用索引。  
